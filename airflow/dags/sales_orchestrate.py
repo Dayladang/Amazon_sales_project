@@ -2,8 +2,7 @@ from airflow.sdk import dag, task, Variable
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 from airflow.providers.google.cloud.hooks.bigquery import BigQueryHook
 from airflow.providers.google.cloud.transfers.local_to_gcs import LocalFilesystemToGCSOperator
-import os
-import subprocess
+from airflow.providers.ssh.operators.ssh import SSHOperator
 
 @dag(
     dag_id="sales_orchestrate",
@@ -11,7 +10,7 @@ import subprocess
     tags=["Amazon_sales"]
 )
 def sales_orchestrate():
-    @task.python()
+    @task.python
     def upload_sales_data():
         print("Uploading sales data...")
 
@@ -31,12 +30,20 @@ def sales_orchestrate():
 
         upload_operator.execute(context={})
 
-    # @task.python()
-    # def pyspark_clean_to_silver():
-    #     print("Cleaning sales data with PySpark...")
+    @task.bash
+    def pyspark_clean_to_silver():
+        run_pyspark_script = SSHOperator(
+            task_id="run_pyspark_script",
+            ssh_conn_id=Variable.get("SSH_CONN_ID"),
+            command=(
+                'cd /d "D:/Documents/coding_stuff/python_nerd/pipeline/spark/" && '
+                'C:/Users/ADMIN/.local/bin/uv.exe run python spark_gcs.py'
+            ),
+            cmd_timeout=3600
+        )
 
-    #     pyspark_script_path = "/opt/spark/sales_clean.py"
+        run_pyspark_script.execute(context={}) 
 
-    upload_sales_data()
+    upload_sales_data() >> pyspark_clean_to_silver()
 
 sales_orchestrate()
