@@ -33,7 +33,6 @@ def gcp_setup_dag():
             exists_ok=True # Tương đương lệnh ifExists: SKIP của Kestra
         )
 
-    # create_gcp_bucket() >> 
-    create_gcp_dataset()
+    create_gcp_bucket() >> create_gcp_dataset()
 
 gcp_setup_dag()
