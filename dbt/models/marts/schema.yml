@@ -1,0 +1,108 @@
+models:
+  - name: fact_order_details
+    description: "Fact table containing detailed information about each order, including product details and payment information."
+    columns:
+      - name: order_key
+        description: "Surrogate key for the order, generated from the OrderID."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_orders')
+                field: order_key
+      - name: product_key
+        description: "Surrogate key for the product, generated from the ProductID."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_products')
+                field: product_key
+      - name: unit_price
+        description: "The price per unit of the product sold in the order."
+      - name: total_amount
+        description: "The total amount for the order, including product cost, tax, and shipping."
+      - name: payment_method
+        description: "The method of payment used for the order."
+      
+  - name: dim_orders
+    description: "Dimension table containing information about orders, including order date, shipping cost, and order status."
+    columns:
+      - name: order_key
+        description: "Surrogate key for the order, generated from the OrderID."
+        tests:
+          - not_null
+          - unique
+      - name: order_date
+        description: "The date when the order was placed."
+      - name: shipping_cost
+        description: "The shipping cost for the order."
+      - name: order_status
+        description: "The current status of the order (e.g., Pending, Shipped, Delivered)."
+      - name: customer_key
+        description: "Surrogate key for the customer, generated from the CustomerID."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_key
+      - name: seller_key
+        description: "Surrogate key for the seller, generated from the SellerID."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_sellers')
+                field: seller_key
+
+  - name: dim_products
+    description: "Dimension table containing information about products, including product name, category, brand, and pricing details."
+    columns:
+      - name: product_key
+        description: "Surrogate key for the product, generated from the ProductID."
+        tests:
+          - not_null
+          - unique
+      - name: product_name
+        description: "The name of the product sold."
+      - name: category
+        description: "The category of the product sold."
+      - name: brand
+        description: "The brand of the product sold."
+      - name: quantity
+        description: "The quantity of the product sold in the order."
+      - name: discount
+        description: "The discount applied to the order, if any."
+      - name: tax
+        description: "The tax amount applied to the order."
+
+  - name: dim_customers
+    description: "Dimension table containing information about customers, including customer name and location details."
+    columns:
+      - name: customer_key
+        description: "Surrogate key for the customer, generated from the CustomerID."
+        tests:
+          - not_null
+          - unique
+      - name: customer_id
+        description: "Unique identifier for each customer."
+      - name: customer_name
+        description: "Full name of the customer."
+      - name: city
+        description: "The city where the customer is located."
+      - name: state
+        description: "The state where the customer is located."
+      - name: country
+        description: "The country where the customer is located."
+
+  - name: dim_sellers
+    description: "Dimension table containing information about sellers, including seller name and location details."
+    columns:
+      - name: seller_key
+        description: "Surrogate key for the seller, generated from the SellerID."
+        tests:
+          - not_null
+          - unique
+      - name: seller_id
+        description: "Unique identifier for the seller of the product."

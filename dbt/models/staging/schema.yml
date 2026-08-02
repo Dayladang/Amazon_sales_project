@@ -1,0 +1,65 @@
+models: 
+  - name: stg_amazon_sales
+    description: "Staging model for Amazon sales data, transforming raw data into a structured format."
+    columns:
+      - name: order_id
+        description: "Unique identifier for each order."
+        tests:
+          - not_null
+          - unique
+      - name: order_date
+        description: "The date when the order was placed."
+      - name: customer_id
+        description: "Unique identifier for each customer."
+        tests:
+          - not_null
+      - name: customer_name
+        description: "Full name of the customer."
+      - name: category
+        description: "The category of the product sold."
+      - name: brand
+        description: "The brand of the product sold."
+      - name: quantity
+        description: "The quantity of the product sold in the order."
+      - name: unit_price
+        description: "The price per unit of the product sold."
+      - name: discount
+        description: "The discount applied to the order, if any."
+      - name: tax
+        description: "The tax amount applied to the order."
+      - name: shipping_cost
+        description: "The shipping cost for the order."
+      - name: total_amount
+        description: "The total amount for the order, including product cost, tax, and shipping."
+      - name: payment_method
+        description: "The method of payment used for the order."
+      - name: order_status
+        description: "The current status of the order (e.g., Pending, Shipped, Delivered)."
+      - name: city
+        description: "The city where the order was shipped."
+      - name: state
+        description: "The state where the order was shipped."
+      - name: country
+        description: "The country where the order was shipped."
+      - name: seller_id
+        description: "Unique identifier for the seller of the product."
+        tests:
+          - not_null
+    
+      - name: order_key
+        description: "Surrogate key for the order, generated from the OrderID."
+        tests:
+          - not_null
+          - unique
+      - name: customer_key
+        description: "Surrogate key for the customer, generated from the CustomerID."
+        tests:
+          - not_null
+      - name: product_key
+        description: "Surrogate key for the product, generated from the ProductID."
+        tests:
+          - not_null
+      - name: seller_key
+        description: "Surrogate key for the seller, generated from the SellerID."
+        tests:
+          - not_null

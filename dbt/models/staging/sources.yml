@@ -1,0 +1,47 @@
+version: 2
+
+sources: 
+  - name: bigquery_raw_sources
+    description: "BigQuery sources for the dbt taxi rides project"
+    database: project-511c440a-e4ba-41b7-b08
+    schema: amazon_sales
+    tables:
+      - name: silver_amazon_sales
+        description: "Silver layer of Amazon sales data, containing cleaned and transformed sales records."
+        columns:
+          - name: OrderID
+            description: "Unique identifier for each order."
+          - name : OrderDate
+            description: "The date when the order was placed."
+          - name: CustomerID
+            description: "Unique identifier for each customer."
+          - name: CustomerName
+            description: "Full name of the customer."
+          - name: Category
+            description: "The category of the product sold."
+          - name: Brand
+            description: "The brand of the product sold."
+          - name: Quantity
+            description: "The quantity of the product sold in the order."
+          - name: UnitPrice
+            description: "The price per unit of the product sold."
+          - name: Discount
+            description: "The discount applied to the order, if any."
+          - name: Tax
+            description: "The tax amount applied to the order."
+          - name: ShippingCost
+            description: "The shipping cost for the order."
+          - name: TotalAmount
+            description: "The total amount for the order, including product cost, tax, and shipping."
+          - name: PaymentMethod
+            description: "The method of payment used for the order."
+          - name: OrderStatus
+            description: "The current status of the order (e.g., Pending, Shipped, Delivered)."
+          - name: City
+            description: "The city where the order was shipped."
+          - name: State
+            description: "The state where the order was shipped."
+          - name: Country
+            description: "The country where the order was shipped."
+          - name: SellerID
+            description: "Unique identifier for the seller of the product."

@@ -1,0 +1,7 @@
+macros:
+  - name: dbt_expectations
+    description: "A set of macros that implement the dbt-expectations package"
+    arguments:
+      - name: vendor_id
+        type: integer
+        description: "Taxi technology provider (1 = Creative Mobile Technologies, 2 = VeriFone Inc.)"

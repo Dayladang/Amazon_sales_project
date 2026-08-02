@@ -1,0 +1,50 @@
+# ==========================================
+# 1. project name and version
+# ==========================================
+name: dbt_amazon_sales
+version: '1.0.0'
+config-version: 2
+
+# ==========================================
+# 2. profile name
+# ==========================================
+# this name has to match the name declared in file ~/.dbt/profiles.yml
+profile: dbt_amazon_sales
+
+# ==========================================
+# 3. folder structure
+# ==========================================
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# ==========================================
+# 4. model configuration (FOR BIGQUERY)
+# ==========================================
+models:
+  dbt_amazon_sales: # Have to match the name: variable at the first line
+    
+    # Default: Create View on GCP to save storage costs
+    +materialized: view
+    
+    # Staging (Bronze/Silver): cleaned data step 1
+    staging:
+      +materialized: view
+
+    intermediate:
+      +materialized: view
+
+    # Core (Gold): business intelligence data
+    # core:
+    #   +materialized: table
+
+    marts:
+      +materialized: table
