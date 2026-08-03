@@ -8,7 +8,7 @@ An automated, production-grade Data Engineering pipeline implementing the **Meda
 ## Tech Stack
 
 - **Orchestration & Workflow:** Apache Airflow (Docker Compose)
-- **Data Processing Engine:** Apache Spark / PySpark
+- **Data Processing Engine:** Apache Spark / PySpark, dbt (data build tool)
 - **Python Package Manager:** `uv`
 - **Cloud Storage & Data Lake:** Google Cloud Storage (GCS)
 - **Data Warehouse:** Google BigQuery
@@ -32,7 +32,8 @@ This project implements a **Hybrid Execution Model** designed to optimize local 
                                                       +--------------------------+
                                                       |  Google Cloud Platform   |
                                                       |  - GCS (Data Lake)       |
-                                                      |  - BigQuery (Data Warehouse)        |
+                                                      |  - BigQuery (Data Warehouse) 
+                                                      |  - DBT                   |
                                                       +--------------------------+
 ```
 ## Medallion Architecture (Data Layers)
@@ -41,20 +42,27 @@ This project implements a **Hybrid Execution Model** designed to optimize local 
 |---|---|---|
 | **Bronze** | GCS (Raw) | Stores raw, immutable data ingested from source systems (CSV/JSON/Parquet) without any structural modifications. |
 | **Silver** | GCS / BigQuery (Staging) | Data cleansing and schema enforcement via **PySpark**: handling missing values, filtering invalid records, deduplication, and type casting. |
-| **Gold** | BigQuery (DWH) | Business-ready data modeled into Fact and Dimension tables, optimized for analytical queries and BI dashboards. |
+| **Gold** | BigQuery (DWH) | Business-ready data modeled by **dbt** into Fact and Dimension tables, optimized for analytical queries and BI dashboards. |
 
 ## Project Structure
 
 ```text
 Amazon_sales_project/
 │
-├── dags/
-│   ├── sales_orchestrate.py          # Main Airflow DAG orchestrating Bronze -> Silver -> Gold
-│   └── ...
+├── airflow/
+│   ├── dags/
+│   │   └── sales_orchestrate.py          # Main Airflow DAG orchestrating Bronze -> Silver -> Gold
+│       |__ gcp_setup_dag.py          # Airflow DAG for GCP resource provisioning (GCS buckets, BigQuery datasets)
 │
 ├── spark/
 │   ├── spark_gcs.py                  # PySpark script for Silver layer transformations & BigQuery sink
 │   └── spark_gcs.ipynb
+│
+├── dbt/                              # dbt models for Gold layer transformation
+│   ├── models/
+│   │   ├── staging/
+│   │   └── marts/
+│   └── dbt_project.yml
 │
 ├── lib/                              # Spark external dependencies (Jars)
 │   ├── gcs-connector-hadoop3-*.jar
