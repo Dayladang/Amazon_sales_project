@@ -1,0 +1,25 @@
+dbt_amazon_sales:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      threads: 4
+      database: project-511c440a-e4ba-41b7-b08 # project id
+      schema: dbt_dev_amazon_sales # dataset name
+      priority: interactive
+      method: service-account
+      keyfile: "/opt/gcp_keys/project-511c440a-e4ba-41b7-b08-a0d6b5fece0b.json"
+      location: asia-southeast1
+      dataproc_batch: null
+
+    # BigQuery Production profile
+    prod:
+      type: bigquery
+      method: service-account
+      project: project-511c440a-e4ba-41b7-b08
+      dataset: dbt_prod_amazon_sales      # Tên dataset chính thức dùng cho báo cáo
+      threads: 4
+      keyfile: "/opt/gcp_keys/project-511c440a-e4ba-41b7-b08-a0d6b5fece0b.json"
+      location: asia-southeast1
+      priority: interactive
+      dataproc_batch: null
